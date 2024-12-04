@@ -70,7 +70,7 @@ bool App::Create() {
 
     SensorUpdater* updater = new SensorUpdater(m_renderObject);
 
-    if (!updater->AddClient("sensor-1", "192.168.1.215", 9999)) {
+    if (!updater->AddClient("sensor-0", "192.168.1.215", 9999)) {
         std::cerr << "Failed to add client: 192.168.1.215:9999" << std::endl;
 
         return false;
