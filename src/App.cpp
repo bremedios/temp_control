@@ -9,7 +9,7 @@
 #include <bpl/graphics/ui/Window.h>
 
 #include "App.h"
-//#include "SensorUpdater.h"
+#include "SensorUpdater.h"
 
 #define OVERLAY_WIDTH 720
 #define OVERLAY_HEIGHT 720
@@ -68,14 +68,26 @@ bool App::Create() {
 
     m_eventLoop= std::make_shared<bpl::graphics::EventLoop>();
 
-    //SensorUdpater* updater = new SensorUdpater(m_renderObject);
+    SensorUpdater* updater = new SensorUpdater(m_renderObject);
 
-    //m_logicObject = bpl::graphics::LogicObjectPtr(updater);
+    if (!updater->AddClient("sensor-1", "192.168.1.215", 9999)) {
+        std::cerr << "Failed to add client: 192.168.1.215:9999" << std::endl;
+
+        return false;
+    }
+
+    if (!updater->AddClient("sensor-1", "192.168.1.216", 9999)) {
+        std::cerr << "Failed to add client: 192.168.1.216:9999" << std::endl;
+
+        return false;
+    }
+
+    m_logicObject = bpl::graphics::LogicObjectPtr(updater);
 
     m_eventLoop->setFramerate(30);
     m_eventLoop->setRenderer(m_renderer);
     m_eventLoop->addRenderObject(m_renderObject);
-    //m_eventLoop->addLogicObject(m_logicObject);
+    m_eventLoop->addLogicObject(m_logicObject);
 
     return true;
 } // Create
@@ -83,6 +95,11 @@ bool App::Create() {
 void App::Destroy() {
     if (!m_initialized) {
         return;
+    }
+
+    if (nullptr != m_logicObject.get()) {
+        m_logicObject->Destroy();
+        m_logicObject->WaitForTermination();
     }
 
     bpl::graphics::FontCache::getInstance()->Clear();
