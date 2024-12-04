@@ -51,7 +51,7 @@ bool App::Create() {
         return false;
     }
 
-    bpl::graphics::ui::Window* uiWindowPtr = new bpl::graphics::ui::Window("views/temperature_sensors.json");
+    bpl::graphics::ui::Window* uiWindowPtr = new bpl::graphics::ui::Window("views/temperature_sensors.json", "temp_control");
 
     if (!uiWindowPtr->Load(m_renderer)) {
         std::cerr << "Failed to load UI Window" << std::endl;
