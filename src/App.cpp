@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <bpl/sys/Hardware.h>
+
 #include <bpl/graphics/FontCache.h>
 #include <bpl/graphics/ui/Window.h>
 
@@ -18,6 +20,8 @@ App::~App() {
 } //~App
 
 bool App::Create() {
+    bpl::sys::Hardware hw;
+
     if (SDL_Init(SDL_INIT_VIDEO)< 0) {
         std::cerr << "SDL Could not initialize.  SDL ERROR: " << SDL_GetError() << std::endl;
 
@@ -31,7 +35,7 @@ bool App::Create() {
         return false;
     }
 
-    m_window = bpl::graphics::Window::CreateInstance("D&D Beyond Overlay", OVERLAY_WIDTH, OVERLAY_HEIGHT, false);
+    m_window = bpl::graphics::Window::CreateInstance("D&D Beyond Overlay", hw.getDisplayWidth(), hw.getDisplayHeight(), hw.getFullscreen());
 
     if (!m_window->isValid()) {
         std::cerr << "Failed to create window" << std::endl;
