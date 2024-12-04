@@ -1,0 +1,99 @@
+{
+  "sprites" : [
+  ],
+  "layout" : {
+    "720x720" : {
+      "ops": [
+        {
+          "name": "background",
+          "type": "fill",
+          "color" : [123,3,252,0]
+        },
+        {
+          "name": "sensor0-container",
+          "type": "image",
+          "filename": "resources/ui/mission box highlighted(info container).png",
+          "scale": false,
+          "dest" : [0, 540, 360, 180]
+        },
+        {
+          "name": "sensor-0-temp",
+          "type": "text",
+          "value": "??.??",
+          "font" : "resources/fonts/Roboto-Regular.ttf",
+          "color" : [255,255,255,255],
+          "font-size" : 80,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [0, 540, 360, 180]
+        },
+        {
+          "name": "sensor-0-humidity",
+          "type": "text",
+          "value": "?? %",
+          "font" : "resources/fonts/Roboto-Regular.ttf",
+          "color" : [252,3,252,0],
+          "font-size" : 30,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [0, 670, 360, 30]
+        },
+        {
+          "name": "sensor-0-title",
+          "type": "text",
+          "value": "Bedroom",
+          "font" : "resources/fonts/Roboto-Regular.ttf",
+          "color" : [255,255, 255,0],
+          "font-size" : 30,
+          "halign": "center",
+          "valign": "top",
+          "dest" : [0, 555, 340, 180]
+        },
+        {
+          "name": "sensor-1-container",
+          "type": "image",
+          "filename": "resources/ui/mission box highlighted(info container).png",
+          "scale": false,
+          "dest" : [360, 540, 360, 180]
+        },
+        {
+          "name": "sensor-1-temp",
+          "type": "text",
+          "value": "?? C",
+          "font" : "resources/fonts/Roboto-Regular.ttf",
+          "color" : [255,255, 255,0],
+          "font-size" : 80,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [380, 540, 360, 180]
+        },
+        {
+          "name": "sensor-1-humidity",
+          "type": "text",
+          "value": "?? %",
+          "font" : "resources/fonts/Roboto-Regular.ttf",
+          "color" : [252,3,252,0],
+          "font-size" : 30,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [380, 670, 360, 30]
+        },
+        {
+          "name": "sensor-1-title",
+          "type": "text",
+          "value": "Outside",
+          "font" : "resources/fonts/Roboto-Regular.ttf",
+          "color" : [255,255, 255,0],
+          "font-size" : 30,
+          "halign": "center",
+          "valign": "top",
+          "dest" : [360, 555, 340, 180]
+        }
+      ]
+
+    },
+    "1920x1080" : {
+
+    }
+  }
+}
