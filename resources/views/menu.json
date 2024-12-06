@@ -1,0 +1,41 @@
+{
+  "sprites" : [
+  ],
+  "layout" : {
+    "720x720" : {
+      "ops": [
+        {
+          "name": "background",
+          "type": "fill",
+          "color" : [123,3,252,0]
+        },
+        {
+          "name": "exit",
+          "type": "text",
+          "value": "Exit",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255,255, 255,0],
+          "font-size" : 30,
+          "halign": "center",
+          "valign": "top",
+          "dest" : [0, 555, 340, 180]
+        },
+        {
+          "name": "exit",
+          "type": "text",
+          "value": "Exit",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255,255, 255,0],
+          "font-size" : 30,
+          "halign": "center",
+          "valign": "top",
+          "dest" : [0, 555, 340, 180]
+        }
+      ]
+
+    },
+    "1920x1080" : {
+
+    }
+  }
+}

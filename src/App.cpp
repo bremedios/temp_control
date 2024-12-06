@@ -2,6 +2,7 @@
 // Created by bradr on 12/3/24.
 //
 #include <iostream>
+#include <memory>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -10,8 +11,9 @@
 #include <bpl/graphics/FontCache.h>
 #include <bpl/graphics/ui/Window.h>
 
+#include <bpl/graphics/screens/ScreenStateStack.h>
+#include "ScreenSensor.h"
 #include "App.h"
-#include "SensorUpdater.h"
 
 #define OVERLAY_WIDTH 720
 #define OVERLAY_HEIGHT 720
@@ -68,30 +70,27 @@ bool App::Create() {
         return false;
     }
 
-    m_renderObject = bpl::graphics::RenderObjectPtr(uiWindowPtr);
-
+    // Initialize event loop
     m_eventLoop= std::make_shared<bpl::graphics::EventLoop>();
-
-    SensorUpdater* updater = new SensorUpdater(m_renderObject);
-
-    if (!updater->AddClient("sensor-0", "192.168.1.215", 9999)) {
-        std::cerr << "Failed to add client: 192.168.1.215:9999" << std::endl;
-
-        return false;
-    }
-
-    if (!updater->AddClient("sensor-1", "192.168.1.216", 9999)) {
-        std::cerr << "Failed to add client: 192.168.1.216:9999" << std::endl;
-
-        return false;
-    }
-
-    m_logicObject = bpl::graphics::LogicObjectPtr(updater);
-
     m_eventLoop->setFramerate(30);
     m_eventLoop->setRenderer(m_renderer);
-    m_eventLoop->addRenderObject(m_renderObject);
-    m_eventLoop->addLogicObject(m_logicObject);
+
+    // Create our screen stack which will manage all of our screens
+    bpl::graphics::screens::ScreenStateStack::getInstance()->setEventLoop(m_eventLoop);
+
+    ScreenSensor* screenSensor = new ScreenSensor();
+    bpl::graphics::screens::ScreenObjectPtr sensorPtr = bpl::graphics::screens::ScreenObjectPtr(screenSensor);
+
+    // Create our screen sensor
+    if (!screenSensor->Create(m_renderer)) {
+        std::cerr << "Failed to create ScreenSensor" << std::endl;
+
+        TTF_Quit();
+        SDL_Quit();
+        return false;
+    }
+
+    bpl::graphics::screens::ScreenStateStack::getInstance()->Push(sensorPtr);
 
     return true;
 } // Create

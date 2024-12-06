@@ -29,7 +29,7 @@ private:
     void UpdateClients_();
 
     std::chrono::time_point<std::chrono::system_clock>  m_nextUpdate = std::chrono::system_clock::now();
-    std::chrono::milliseconds                           m_nextUpdateInterval = std::chrono::milliseconds(10000);
+    std::chrono::milliseconds                           m_nextUpdateInterval = std::chrono::milliseconds(1000);
 
     bpl::graphics::RenderObjectPtr  m_renderObject;
     bpl::graphics::ui::Window*      m_uiWindow      = nullptr;

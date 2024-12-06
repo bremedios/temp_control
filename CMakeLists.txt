@@ -11,7 +11,7 @@ find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 
 include_directories("../libbpl_graphics/libbpl_graphics/include" ../pinode/libpinode/include ../libbpl_net/libbpl_net/include ../libbpl_sys/libbpl_sys/include ../libbpl_storage/libbpl_storage/include)
 
-add_executable(temp_control src/App.cpp src/main.cpp src/SensorUpdater.cpp)
+add_executable(temp_control src/App.cpp src/main.cpp src/SensorUpdater.cpp src/ScreenSensor.cpp)
 
 target_link_libraries(temp_control PRIVATE SDL2::SDL2 SDL2_ttf::SDL2_ttf SDL2_image::SDL2_image bpl_sys bpl_graphics pinode fmt bpl_net devices_dht22)
 
