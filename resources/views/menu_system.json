@@ -1,0 +1,126 @@
+{
+  "sprites" : [
+  ],
+  "layout" : {
+    "720x720" : {
+      "ops": [
+        {
+          "name": "background",
+          "type": "fill",
+          "color" : [123,3,252,0]
+        },
+        {
+          "name": "system-menu-title",
+          "type": "text",
+          "value": "Temperature Controller",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255, 0],
+          "font-size" : 60,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [0, 20, 720, 180]
+        },
+        {
+          "name": "resume-selected",
+          "type": "text",
+          "value": "Resume",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255, 0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": false,
+          "dest" : [0, 120, 720, 180]
+        },
+        {
+          "name": "resume-not-selected",
+          "type": "text",
+          "value": "Resume",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [0, 0, 0, 0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": true,
+          "dest" : [0, 120, 720, 180]
+        },
+        {
+          "name": "display-settings-selected",
+          "type": "text",
+          "value": "Display Settings",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255, 0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": false,
+          "dest" : [0, 180, 720, 180]
+        },
+        {
+          "name": "display-settings-not-selected",
+          "type": "text",
+          "value": "Display Settings",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [0, 0, 0, 0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": true,
+          "dest" : [0, 180, 720, 180]
+        },
+        {
+          "name": "program-settings-selected",
+          "type": "text",
+          "value": "Program Settings",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255, 0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": false,
+          "dest" : [0, 240, 720, 180]
+        },
+        {
+          "name": "program-settings-not-selected",
+          "type": "text",
+          "value": "Program Settings",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [0, 0, 0, 0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": true,
+          "dest" : [0, 240, 720, 180]
+        },
+        {
+          "name": "exit-selected",
+          "type": "text",
+          "value": "Exit",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255,255, 255,0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": false,
+          "dest" : [0, 300, 720, 180]
+        },
+        {
+          "name": "exit-not-selected",
+          "type": "text",
+          "value": "Exit",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [0, 0, 0, 0],
+          "font-size" : 40,
+          "halign": "center",
+          "valign": "center",
+          "visible": true,
+          "dest" : [0, 300, 720, 180]
+        }
+      ]
+
+    },
+    "1920x1080" : {
+
+    }
+  }
+}

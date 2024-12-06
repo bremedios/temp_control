@@ -11,6 +11,8 @@
 #include "ScreenSensor.h"
 
 bool ScreenSensor::Create(bpl::graphics::RendererPtr& renderer) {
+    m_name = "Temperature Sensor View";
+
     bpl::graphics::ui::Window* uiWindowPtr = new bpl::graphics::ui::Window("views/temperature_sensors.json", "temp_control");
 
     if (!uiWindowPtr->Load(renderer)) {

@@ -8,11 +8,13 @@
 #include <bpl/graphics/draw/ops/Fill.h>
 #include <bpl/graphics/draw/ops/Image.h>
 #include <bpl/graphics/draw/ops/Text.h>
+#include <bpl/graphics/screens/ScreenStateStack.h>
 
 #include <fmt/format.h>
 
-#include "SensorUpdater.h"
+#include "../../libbpl_controls/libbpl_controls/include/bpl/controls/Keycode.h"
 #include "Debug.h"
+#include "SensorUpdater.h"
 
 SensorUpdater::SensorUpdater(bpl::graphics::RenderObjectPtr& renderObject)
     : m_renderObject(renderObject) {
@@ -109,8 +111,17 @@ void SensorUpdater::UpdateClients_() {
     }
 } // void SensorUpdater::UpdateClients_() {
 
-void SensorUpdater::Logic(bpl::graphics::RendererPtr& renderer) {
+void SensorUpdater::Logic(bpl::graphics::RendererPtr& renderer, bpl::controls::InputPtr& input) {
     auto now = std::chrono::system_clock::now();
+
+    if (input->KeyDown(bpl::controls::KeyCode::INPUT_START) && input->KeyDown(bpl::controls::KeyCode::INPUT_SELECT)) {
+        DEBUG_MSG("Start and Select Down");
+        bpl::graphics::screens::ScreenStateStack::getInstance()->Push("QUIT PROGRAM");
+    }
+    else if (input->KeyPressed(bpl::controls::KeyCode::INPUT_START)) {
+        DEBUG_MSG("Pushing System Menu to screen stack")
+        bpl::graphics::screens::ScreenStateStack::getInstance()->Push("System Menu");
+    }
 
     if (now > m_nextUpdate) {
         m_nextUpdate = std::chrono::system_clock::now() + m_nextUpdateInterval;

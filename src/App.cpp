@@ -10,10 +10,13 @@
 
 #include <bpl/graphics/FontCache.h>
 #include <bpl/graphics/ui/Window.h>
+#include <bpl/controls/Input.h>
 
-#include <bpl/graphics/screens/ScreenStateStack.h>
-#include "ScreenSensor.h"
 #include "App.h"
+#include "ScreenSensor.h"
+#include <bpl/graphics/screens/ScreenStateStack.h>
+
+#include "SystemMenu.h"
 
 #define OVERLAY_WIDTH 720
 #define OVERLAY_HEIGHT 720
@@ -36,6 +39,11 @@ bool App::Create() {
         SDL_Quit();
         return false;
     }
+
+    m_input = std::make_shared<bpl::controls::Input>();
+
+    m_input->Create();
+    m_input->ScanJoysticks();
 
     m_window = bpl::graphics::Window::CreateInstance("D&D Beyond Overlay", hw.getDisplayWidth(), hw.getDisplayHeight(), hw.getFullscreen());
 
@@ -90,7 +98,22 @@ bool App::Create() {
         return false;
     }
 
-    bpl::graphics::screens::ScreenStateStack::getInstance()->Push(sensorPtr);
+    SystemMenu* systemMenu = new SystemMenu();
+    bpl::graphics::screens::ScreenObjectPtr systemMenuPtr = bpl::graphics::screens::ScreenObjectPtr(systemMenu);
+
+    // Create our screen sensor
+    if (!systemMenu->Create(m_renderer)) {
+        std::cerr << "Failed to create SystemMenu" << std::endl;
+
+        TTF_Quit();
+        SDL_Quit();
+        return false;
+    }
+
+    bpl::graphics::screens::ScreenStateStack::getInstance()->AddScreen(sensorPtr);
+    bpl::graphics::screens::ScreenStateStack::getInstance()->AddScreen(systemMenuPtr);
+
+    bpl::graphics::screens::ScreenStateStack::getInstance()->Push("Temperature Sensor View");
 
     return true;
 } // Create

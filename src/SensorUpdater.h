@@ -23,7 +23,7 @@ public:
 
     bool AddClient(const std::string& component, const std::string& host, const int port);
 
-    void Logic(bpl::graphics::RendererPtr& renderer) override;
+    void Logic(bpl::graphics::RendererPtr& renderer, bpl::controls::InputPtr& input) override;
 private:
     void UpdateClient_(const std::string& component, pinode::ClientPtr client);
     void UpdateClients_();
