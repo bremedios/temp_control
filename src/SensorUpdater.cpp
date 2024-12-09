@@ -93,14 +93,16 @@ void SensorUpdater::UpdateClient_(const std::string& component, pinode::ClientPt
 
         textPtr->setValue(fmt::format("{}", client->getName()));
     }
-    /* Humidity not yet support by pinode client
+
     if (m_uiWindow->getJsonLoader().GetOpMap().contains(component + "-humidity")) {
         bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()[component + "-humidity"];
 
         bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
 
-        textPtr->setValue(fmt::format("{:.2f}", client->getName()));
-    }*/
+        DEBUG_MSG("Setting : " << component + "-humidity" << fmt::format(": {:.2f}", client->getHumidity()));
+
+        textPtr->setValue(fmt::format("{:.2f}", client->getHumidity()));
+    }
 } // UpdateClient_
 
 void SensorUpdater::UpdateClients_() {
