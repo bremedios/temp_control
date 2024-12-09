@@ -20,7 +20,7 @@ add_executable(temp_control src/App.cpp src/main.cpp src/SensorUpdater.cpp src/S
 
 target_link_libraries(temp_control PRIVATE SDL2::SDL2 SDL2_ttf::SDL2_ttf SDL2_image::SDL2_image bpl_sys bpl_controls bpl_graphics pinode fmt bpl_net devices_dht22)
 
-install(TARGETS temp_control DESTINATION bin)
-install(DIRECTORY resources/fonts DESTINATION share)
-install(DIRECTORY resources/ui DESTINATION share/games/temp_control)
-install(DIRECTORY resources/views DESTINATION share/games/temp_control)
+install(TARGETS temp_control DESTINATION usr/bin)
+install(DIRECTORY resources/fonts DESTINATION usr/share)
+install(DIRECTORY resources/ui DESTINATION usr/share/games/temp_control)
+install(DIRECTORY resources/views DESTINATION usr/share/games/temp_control)
