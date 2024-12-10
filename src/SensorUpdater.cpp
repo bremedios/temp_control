@@ -101,7 +101,7 @@ void SensorUpdater::UpdateClient_(const std::string& component, pinode::ClientPt
 
         DEBUG_MSG("Setting : " << component + "-humidity" << fmt::format(": {:.2f}", client->getHumidity()));
 
-        textPtr->setValue(fmt::format("{:.2f}", client->getHumidity()));
+        textPtr->setValue(fmt::format("{:.1f} %", client->getHumidity()));
     }
 } // UpdateClient_
 
