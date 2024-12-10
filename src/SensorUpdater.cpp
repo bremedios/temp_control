@@ -79,9 +79,14 @@ void SensorUpdater::UpdateClient_(const std::string& component, pinode::ClientPt
 
         bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
 
-        DEBUG_MSG("Setting : " << component + "-temp" << fmt::format(": {:.2f}", client->getTemperature()));
+        if (client->hasTemperature()) {
+            DEBUG_MSG("Setting : " << component + "-temp" << fmt::format(": {:.2f}", client->getTemperature()));
 
-        textPtr->setValue(fmt::format("{:.2f}", client->getTemperature()));
+            textPtr->setValue(fmt::format("{:.2f}", client->getTemperature()));
+        }
+        else {
+            textPtr->setValue("----");
+        }
     }
 
     if (m_uiWindow->getJsonLoader().GetOpMap().contains(component + "-title")) {
@@ -99,9 +104,14 @@ void SensorUpdater::UpdateClient_(const std::string& component, pinode::ClientPt
 
         bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
 
-        DEBUG_MSG("Setting : " << component + "-humidity" << fmt::format(": {:.2f}", client->getHumidity()));
+        if (client->hasHumidity()) {
+            DEBUG_MSG("Setting : " << component + "-humidity" << fmt::format(": {:.2f}", client->getHumidity()));
 
-        textPtr->setValue(fmt::format("{:.1f} %", client->getHumidity()));
+            textPtr->setValue(fmt::format("{:.1f} %", client->getHumidity()));
+        }
+        else {
+            textPtr->setValue("----");
+        }
     }
 } // UpdateClient_
 
