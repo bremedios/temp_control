@@ -40,8 +40,8 @@ bool ScreenSensor::Create(bpl::graphics::RendererPtr& renderer) {
         return false;
     }
 
-    if (!updater->AddHeaterClient("heater-0", "127.0.0.1", 9998)) {
-        std::cerr << "Failed to add client: 192.168.1.215:9998" << std::endl;
+    if (!updater->AddHeaterClient("heater-0", "192.168.1.216", 9998)) {
+        std::cerr << "Failed to add client: 192.168.1.216:9998" << std::endl;
 
         return false;
     }
