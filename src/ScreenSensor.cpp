@@ -28,14 +28,20 @@ bool ScreenSensor::Create(bpl::graphics::RendererPtr& renderer) {
 
     SensorUpdater* updater = new SensorUpdater(renderObject);
 
-    if (!updater->AddClient("sensor-0", "192.168.1.215", 9999)) {
+    if (!updater->AddSensorClient("sensor-0", "192.168.1.215", 9999)) {
         std::cerr << "Failed to add client: 192.168.1.215:9999" << std::endl;
 
         return false;
     }
 
-    if (!updater->AddClient("sensor-1", "192.168.1.216", 9999)) {
+    if (!updater->AddSensorClient("sensor-1", "192.168.1.216", 9999)) {
         std::cerr << "Failed to add client: 192.168.1.216:9999" << std::endl;
+
+        return false;
+    }
+
+    if (!updater->AddHeaterClient("heater-0", "127.0.0.1", 9998)) {
+        std::cerr << "Failed to add client: 192.168.1.215:9998" << std::endl;
 
         return false;
     }

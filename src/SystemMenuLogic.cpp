@@ -15,12 +15,12 @@ SystemMenuLogic::SystemMenuLogic(bpl::graphics::RenderObjectPtr& renderObject)
 void SystemMenuLogic::Logic(bpl::graphics::RendererPtr& renderer, bpl::controls::InputPtr& input) {
 
     // This is cancel
-    if (input->KeyPressed(bpl::controls::KeyCode::INPUT_ESCAPE) || input->KeyPressed(bpl::controls::KeyCode::INPUT_LEFT)) {
+    if (input->KeyPressed(bpl::controls::KeyCode::INPUT_ESCAPE) || input->KeyPressed(bpl::controls::KeyCode::INPUT_LEFT) || input->KeyPressed(bpl::controls::KeyCode::INPUT_BUTTON_B)) {
         bpl::graphics::screens::ScreenStateStack::getInstance()->Pop();
     }
 
     // Handle selection of menu item
-    if (input->KeyPressed(bpl::controls::KeyCode::INPUT_ENTER) || input->KeyPressed(bpl::controls::KeyCode::INPUT_RIGHT)) {
+    if (input->KeyPressed(bpl::controls::KeyCode::INPUT_ENTER) || input->KeyPressed(bpl::controls::KeyCode::INPUT_RIGHT) || input->KeyPressed(bpl::controls::KeyCode::INPUT_BUTTON_A)) {
         switch (m_state) {
         case SYSTEM_MENU_STATE_RESUME:
             bpl::graphics::screens::ScreenStateStack::getInstance()->Pop();

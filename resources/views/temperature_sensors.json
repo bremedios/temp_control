@@ -19,7 +19,7 @@
         {
           "name": "sensor-0-temp",
           "type": "text",
-          "value": "??.??",
+          "value": "N/A",
           "font" : "Roboto-Regular.ttf",
           "color" : [255,255,255,255],
           "font-size" : 80,
@@ -30,7 +30,7 @@
         {
           "name": "sensor-0-humidity",
           "type": "text",
-          "value": "?? %",
+          "value": "N/A",
           "font" : "Roboto-Regular.ttf",
           "color" : [252,3,252,0],
           "font-size" : 30,
@@ -41,7 +41,7 @@
         {
           "name": "sensor-0-title",
           "type": "text",
-          "value": "Bedroom",
+          "value": "<Unknown>",
           "font" : "Roboto-Regular.ttf",
           "color" : [255,255, 255,0],
           "font-size" : 30,
@@ -59,7 +59,7 @@
         {
           "name": "sensor-1-temp",
           "type": "text",
-          "value": "?? C",
+          "value": "N/A",
           "font" : "Roboto-Regular.ttf",
           "color" : [255,255, 255,0],
           "font-size" : 80,
@@ -70,7 +70,7 @@
         {
           "name": "sensor-1-humidity",
           "type": "text",
-          "value": "?? %",
+          "value": "N/A",
           "font" : "Roboto-Regular.ttf",
           "color" : [252,3,252,0],
           "font-size" : 30,
@@ -81,13 +81,85 @@
         {
           "name": "sensor-1-title",
           "type": "text",
-          "value": "Outside",
+          "value": "<Unknown>",
           "font" : "Roboto-Regular.ttf",
           "color" : [255,255, 255,0],
           "font-size" : 30,
           "halign": "center",
           "valign": "top",
           "dest" : [360, 555, 340, 180]
+        },
+        {
+          "name": "heater-temp-prog",
+          "type": "text",
+          "value": "----",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 0, 0,0],
+          "font-size" : 240,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [0, 180, 720, 180],
+          "visible" : true
+        },
+        {
+          "name": "heater-temp",
+          "type": "text",
+          "value": "23.5",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255,0],
+          "font-size" : 240,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [0, 180, 720, 180],
+          "visible" : false
+        },
+        {
+          "name": "heater-temp-pending",
+          "type": "text",
+          "value": "19.5",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [170, 170, 170,0],
+          "font-size" : 240,
+          "halign": "center",
+          "valign": "center",
+          "dest" : [0, 180, 720, 180],
+          "visible" : false
+        },
+        {
+          "name": "heater-state",
+          "type": "text",
+          "value": "HEATING",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255,0],
+          "font-size" : 30,
+          "halign": "left",
+          "valign": "top",
+          "dest" : [5, 5, 720, 30],
+          "visible" : false
+        },
+        {
+          "name": "program-state-program",
+          "type": "text",
+          "value": "PROG",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255,0],
+          "font-size" : 30,
+          "halign": "right",
+          "valign": "bottom",
+          "dest" : [160, 180, 400, 210],
+          "visible" : false
+        },
+        {
+          "name": "program-state-override",
+          "type": "text",
+          "value": "OVERRIDE",
+          "font" : "Roboto-Regular.ttf",
+          "color" : [255, 255, 255,0],
+          "font-size" : 30,
+          "halign": "left",
+          "valign": "bottom",
+          "dest" : [160, 180,400, 210],
+          "visible" : false
         }
       ]
 

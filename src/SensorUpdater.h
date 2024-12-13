@@ -21,11 +21,13 @@ public:
     void Destroy() override;
     void WaitForTermination() override;
 
-    bool AddClient(const std::string& component, const std::string& host, const int port);
+    bool AddHeaterClient(const std::string& component, const std::string& host, const int port);
+    bool AddSensorClient(const std::string& component, const std::string& host, const int port);
 
     void Logic(bpl::graphics::RendererPtr& renderer, bpl::controls::InputPtr& input) override;
 private:
     void UpdateClient_(const std::string& component, pinode::ClientPtr client);
+    void UpdateHeaterStatus_(pinode::ClientPtr client);
     void UpdateClients_();
 
     std::chrono::time_point<std::chrono::system_clock>  m_nextUpdate = std::chrono::system_clock::now();

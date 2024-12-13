@@ -48,7 +48,7 @@ void SensorUpdater::WaitForTermination() {
     m_clients.clear();
 } // WaitForTermination
 
-bool SensorUpdater::AddClient(const std::string& component, const std::string& host, const int port) {
+bool SensorUpdater::AddHeaterClient(const std::string& component, const std::string& host, const int port) {
     pinode::ClientPtr client = std::make_shared<pinode::Client>();
 
     if (!client->Connect(host, port)) {
@@ -63,6 +63,8 @@ bool SensorUpdater::AddClient(const std::string& component, const std::string& h
         return false;
     }
 
+    client->EnableHeater(true);
+
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -70,7 +72,33 @@ bool SensorUpdater::AddClient(const std::string& component, const std::string& h
     }
 
     return true;
-} // AddClient
+} // AddHeaterClient
+
+bool SensorUpdater::AddSensorClient(const std::string& component, const std::string& host, const int port) {
+    pinode::ClientPtr client = std::make_shared<pinode::Client>();
+
+    if (!client->Connect(host, port)) {
+        ERROR_MSG("pinode::Client::Connect(" << host << ":" << port << ") Failed");
+
+        return false;
+    }
+
+    if (!client->Start()) {
+        ERROR_MSG("pinode::Client::Start() [" << host << ":" << port << "] Failed");
+
+        return false;
+    }
+
+    client->EnableSensor(true);
+
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
+        m_clients.emplace(component, client);
+    }
+
+    return true;
+} // AddSensorClient
 
 void SensorUpdater::UpdateClient_(const std::string& component, pinode::ClientPtr client) {
 
@@ -115,11 +143,101 @@ void SensorUpdater::UpdateClient_(const std::string& component, pinode::ClientPt
     }
 } // UpdateClient_
 
+void SensorUpdater::UpdateHeaterStatus_(pinode::ClientPtr client) {
+    auto heaterStatus = client->getHeaterStatus();
+
+    if (nullptr == heaterStatus.get()) {
+        ERROR_MSG("Failed to get heater status");
+
+        if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp-prog")) {
+            bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp-prog"];
+
+            bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+            textPtr->setValue("----");
+            textPtr->setVisible(true);
+        }
+
+        return;
+    }
+
+    if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp-prog")) {
+        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp-prog"];
+
+        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+        DEBUG_MSG("Setting : " << "heater-temp-prog" << fmt::format(": {:.1f}", heaterStatus->getProgramTemperature()));
+
+        textPtr->setValue(fmt::format("{:.1f}", heaterStatus->getProgramTemperature()));
+        textPtr->setVisible(!heaterStatus->isOverridden());
+    }
+
+    if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp")) {
+        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp"];
+
+        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+        DEBUG_MSG("Setting : " << "heater-temp" << fmt::format(": {:.1f}", heaterStatus->getTemperature()));
+
+        textPtr->setValue(fmt::format("{:.1f}", heaterStatus->getTemperature()));
+        textPtr->setVisible(heaterStatus->isOverridden());
+    }
+
+    // this is not yet supported, so this should always be set to invisible
+    if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp-pending")) {
+        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp-pending"];
+
+        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+        DEBUG_MSG("Setting : " << "heater-temp-pending" << fmt::format(": {:.1f}", heaterStatus->getTemperature()));
+
+        textPtr->setValue(fmt::format("{:.1f}", heaterStatus->getTemperature()));
+        textPtr->setVisible(false);
+    }
+
+    if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-state")) {
+        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-state"];
+
+        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+        textPtr->setVisible(heaterStatus->isOn());
+    }
+
+    if (m_uiWindow->getJsonLoader().GetOpMap().contains("program-state-program")) {
+        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["program-state-program"];
+
+        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+        textPtr->setVisible(!heaterStatus->isOverridden());
+    }
+
+    if (m_uiWindow->getJsonLoader().GetOpMap().contains("program-state-override")) {
+        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["program-state-override"];
+
+        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+        textPtr->setVisible(heaterStatus->isOverridden());
+    }
+} // UpdateHeaterStatus_
+
 void SensorUpdater::UpdateClients_() {
     std::lock_guard<std::mutex> lock(m_mutex);
 
+    int heaterCount = 0;
+
     for (auto& client : m_clients) {
-        UpdateClient_(client.first, client.second);
+
+        if (client.second->hasHeaterStatus()) {
+            if (heaterCount > 0) {
+                ERROR_MSG("Too many heaters registered");
+            }
+            UpdateHeaterStatus_(client.second);
+
+            heaterCount++;
+        }
+        if (client.second->hasTemperature() || client.second->hasHumidity()) {
+            UpdateClient_(client.first, client.second);
+        }
     }
 } // void SensorUpdater::UpdateClients_() {
 
