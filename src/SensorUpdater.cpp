@@ -161,17 +161,14 @@ void SensorUpdater::UpdateHeaterStatus_(pinode::ClientPtr client) {
         return;
     }
 
-    if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp-prog")) {
-        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp-prog"];
-
-        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
-
-        DEBUG_MSG("Setting : " << "heater-temp-prog" << fmt::format(": {:.1f}", heaterStatus->getProgramTemperature()));
-
-        textPtr->setValue(fmt::format("{:.1f}", heaterStatus->getProgramTemperature()));
-        textPtr->setVisible(!heaterStatus->isOverridden());
+    // Check to see if we no longer need to show a pending override
+    if (m_overridePending) {
+        if (heaterStatus->getTemperature() == m_pendingTemperature) {
+            m_overridePending = false;
+        }
     }
 
+    // temperature override driven by heater
     if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp")) {
         bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp"];
 
@@ -179,11 +176,24 @@ void SensorUpdater::UpdateHeaterStatus_(pinode::ClientPtr client) {
 
         DEBUG_MSG("Setting : " << "heater-temp" << fmt::format(": {:.1f}", heaterStatus->getTemperature()));
 
-        textPtr->setValue(fmt::format("{:.1f}", heaterStatus->getTemperature()));
-        textPtr->setVisible(heaterStatus->isOverridden());
+        textPtr->setValue(fmt::format("{:.2f}", heaterStatus->getTemperature()));
+
+        textPtr->setVisible(!m_overridePending && heaterStatus->isOverridden());
     }
 
-    // this is not yet supported, so this should always be set to invisible
+    // temperature of program
+    if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp-prog")) {
+        bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp-prog"];
+
+        bpl::graphics::draw::ops::TextPtr textPtr = std::dynamic_pointer_cast<bpl::graphics::draw::ops::Text>(ptr);
+
+        DEBUG_MSG("Setting : " << "heater-temp-prog" << fmt::format(": {:.1f}", heaterStatus->getProgramTemperature()));
+
+        textPtr->setValue(fmt::format("{:.2f}", heaterStatus->getProgramTemperature()));
+        textPtr->setVisible(!m_overridePending && !heaterStatus->isOverridden());
+    }
+
+    // Temperature override has not been set yet
     if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-temp-pending")) {
         bpl::graphics::draw::ops::OpPtr ptr = m_uiWindow->getJsonLoader().GetOpMap()["heater-temp-pending"];
 
@@ -191,8 +201,8 @@ void SensorUpdater::UpdateHeaterStatus_(pinode::ClientPtr client) {
 
         DEBUG_MSG("Setting : " << "heater-temp-pending" << fmt::format(": {:.1f}", heaterStatus->getTemperature()));
 
-        textPtr->setValue(fmt::format("{:.1f}", heaterStatus->getTemperature()));
-        textPtr->setVisible(false);
+        textPtr->setValue(fmt::format("{:.2f}", m_pendingTemperature));
+        textPtr->setVisible(m_overridePending);
     }
 
     if (m_uiWindow->getJsonLoader().GetOpMap().contains("heater-state")) {
@@ -251,6 +261,47 @@ void SensorUpdater::Logic(bpl::graphics::RendererPtr& renderer, bpl::controls::I
     else if (input->KeyPressed(bpl::controls::KeyCode::INPUT_START)) {
         DEBUG_MSG("Pushing System Menu to screen stack")
         bpl::graphics::screens::ScreenStateStack::getInstance()->Push("System Menu");
+    }
+    else if (input->KeyPressed(bpl::controls::KeyCode::INPUT_UP)) {
+        DEBUG_MSG("Temperature Up");
+
+        for (auto& client : std::views::values(m_clients)) {
+            if (client->hasHeaterStatus()) {
+                if (!m_overridePending) {
+                    m_overridePending = true;
+                    m_pendingTemperature = client->getHeaterStatus()->getTemperature();
+                }
+
+                m_pendingTemperature = m_pendingTemperature + 0.25;
+
+                client->SendTemperatureOverride(m_pendingTemperature);
+            }
+        }
+    }
+    else if (input->KeyPressed(bpl::controls::KeyCode::INPUT_DOWN)) {
+        DEBUG_MSG("Temperature Up");
+
+        for (auto& client : std::views::values(m_clients)) {
+            if (client->hasHeaterStatus()) {
+                if (!m_overridePending) {
+                    m_overridePending = true;
+                    m_pendingTemperature = client->getHeaterStatus()->getTemperature();
+                }
+
+                m_pendingTemperature = m_pendingTemperature - 0.25;
+
+                client->SendTemperatureOverride(m_pendingTemperature);
+            }
+        }
+    }
+    else if (input->KeyPressed(bpl::controls::KeyCode::INPUT_SELECT)) {
+        DEBUG_MSG("Temperature Up");
+
+        for (auto& client : std::views::values(m_clients)) {
+            if (client->hasHeaterStatus()) {
+                client->ClearTemperatureOverride();
+            }
+        }
     }
 
     if (now > m_nextUpdate) {

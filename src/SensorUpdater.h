@@ -37,6 +37,8 @@ private:
     bpl::graphics::ui::Window*      m_uiWindow      = nullptr;
     bool                            m_firstRun      = true;
     std::mutex                      m_mutex;
+    float                           m_pendingTemperature = 0.0f;
+    bool                            m_overridePending=false;
 
     std::map<std::string, pinode::ClientPtr> m_clients;
 }; // SensorUpdater
