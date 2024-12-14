@@ -12,9 +12,10 @@
 
 #include <fmt/format.h>
 
-#include "../../libbpl_controls/libbpl_controls/include/bpl/controls/Keycode.h"
+#include <bpl/controls/Keycode.h>
 #include "Debug.h"
 #include "SensorUpdater.h"
+
 
 SensorUpdater::SensorUpdater(bpl::graphics::RenderObjectPtr& renderObject)
     : m_renderObject(renderObject) {
@@ -35,6 +36,7 @@ void SensorUpdater::Destroy() {
     for (auto & client : std::views::values(m_clients)) {
         client->Terminate();
     }
+    m_clients.clear();
 } // Destroy
 
 void SensorUpdater::WaitForTermination() {

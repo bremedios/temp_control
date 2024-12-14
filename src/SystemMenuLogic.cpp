@@ -3,7 +3,10 @@
 //
 
 #include "SystemMenuLogic.h"
+#include <bpl/sys/Stopwatch.h>
 #include <bpl/graphics/screens/ScreenStateStack.h>
+
+extern bpl::sys::Stopwatch g_shutdownStopwatch;
 
 SystemMenuLogic::SystemMenuLogic(bpl::graphics::RenderObjectPtr& renderObject)
     : m_renderObject(renderObject) {
@@ -33,6 +36,7 @@ void SystemMenuLogic::Logic(bpl::graphics::RendererPtr& renderer, bpl::controls:
             break;
         case SYSTEM_MENU_STATE_EXIT:
             bpl::graphics::screens::ScreenStateStack::getInstance()->Push("QUIT PROGRAM");
+            g_shutdownStopwatch.Start();
             break;
         }
     }

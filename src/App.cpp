@@ -115,17 +115,46 @@ bool App::Create() {
 
     bpl::graphics::screens::ScreenStateStack::getInstance()->Push("Temperature Sensor View");
 
+    m_initialized = true;
+
     return true;
 } // Create
 
 void App::Destroy() {
     if (!m_initialized) {
+        std::cout << "Not Initialized, exiting Destroy" << std::endl;
         return;
     }
+
+    bpl::graphics::screens::ScreenStateStack::getInstance()->Clear();
 
     if (nullptr != m_logicObject.get()) {
         m_logicObject->Destroy();
         m_logicObject->WaitForTermination();
+    }
+
+    if (nullptr != m_eventLoop.get()) {
+        m_eventLoop->Clear();
+        m_eventLoop->Terminate();
+        m_eventLoop.reset();
+    }
+
+    if (nullptr != m_renderObject.get()) {
+        m_renderObject.reset();
+    }
+
+    if (nullptr != m_input.get()) {
+        m_input->Destroy();
+        m_input.reset();
+    }
+
+    if (nullptr != m_renderer.get()) {
+        m_renderer->Destroy();
+        m_renderer.reset();
+    }
+
+    if (nullptr != m_window.get()) {
+        m_window.reset();
     }
 
     bpl::graphics::FontCache::getInstance()->Clear();
